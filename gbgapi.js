@@ -91,7 +91,7 @@ function readParkings(location) {
         options.path += `&radius=${location.radius}`
       }
     }
-    console.log("Fetching parkings... from ", options.host, options.path)
+    console.log("Fetching parkings... from ", options.host, location)
     var req = http.request(options, response => {
       console.log("Data fetched, response status: ", response.statusCode);
 

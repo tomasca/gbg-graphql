@@ -28,6 +28,11 @@ provider:
   region: eu-west-1
   profile: serverlessDev
 
+plugins:
+  - serverless-crypt
+
+custom:
+  cryptKeyId: ${env:AWS_KMS_KEYID}
 
 # you can add statements to the Lambda function's IAM Role here
 #  iamRoleStatements:
@@ -45,8 +50,7 @@ provider:
 #            - "Ref" : "ServerlessDeploymentBucket"
 
 # you can define service wide environment variables here
-  environment:
-    GBG_APPID: <insert your GBG_APPID>
+#  environment:
 
 # you can add packaging information here
 #package:
