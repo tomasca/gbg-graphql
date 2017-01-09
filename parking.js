@@ -2,16 +2,41 @@
  * Copyright (c) 2017 Tomas Carlfalk
  *
  */
+'use strict';
 var express = require('express');
 var graphqlHTTP = require('express-graphql');
-var {
-  buildSchema
-} = require('graphql');
+var graphql = require('graphql');
 var http = require('http');
 var JSONStream = require('JSONStream')
 
+
+module.exports.gbggraphql = (event, context, callback) => {
+  /*
+    const response = {
+    statusCode: 200,
+    body: JSON.stringify({
+      message: 'Go Serverless v1.0! Your function executed successfully! Foobar!',
+      input: event,
+    }),
+  };
+
+  callback(null, response);
+*/
+ var query = event.body
+ graphql.graphql(schema, query, root).then((graphQLresponse) => {
+    //console.log(graphQLresponse);
+    const response = {
+      statusCode: 200,
+      body: JSON.stringify(graphQLresponse),
+    };
+
+    callback(null, response);
+  });
+};
+
+
 // The schema definition, using GraphQL schema language
-var schema = buildSchema(`
+var schema = graphql.buildSchema(`
   
   input GeoLocationCriteria {
     latitude: Float!
@@ -123,6 +148,7 @@ var root = {
   parkings: location => readParkings(location.location),
 };
 
+/*
 var app = express();
 app.use('/graphql', graphqlHTTP({
   schema: schema,
@@ -131,3 +157,4 @@ app.use('/graphql', graphqlHTTP({
 }));
 app.listen(1337);
 console.log('Running a GraphQL API server at localhost:1337/graphql');
+*/
