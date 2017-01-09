@@ -46,7 +46,7 @@ provider:
 
 # you can define service wide environment variables here
   environment:
-    GBG_APPID: caef4bf2-bdd0-4ead-8d39-1a3b2527c84d
+    GBG_APPID: <insert your GBG_APPID>
 
 # you can add packaging information here
 #package:
@@ -78,7 +78,7 @@ functions:
     events:
       - http:
           path: /
-          method: post
+          method: any
 #    Define function environment variables here
 #    environment:
 #      variable2: value2
