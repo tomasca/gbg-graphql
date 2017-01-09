@@ -1,39 +1,10 @@
 /*
  * Copyright (c) 2017 Tomas Carlfalk
- *
  */
 'use strict';
-var express = require('express');
-var graphqlHTTP = require('express-graphql');
 var graphql = require('graphql');
 var http = require('http');
 var JSONStream = require('JSONStream')
-
-
-module.exports.gbggraphql = (event, context, callback) => {
-  /*
-    const response = {
-    statusCode: 200,
-    body: JSON.stringify({
-      message: 'Go Serverless v1.0! Your function executed successfully! Foobar!',
-      input: event,
-    }),
-  };
-
-  callback(null, response);
-*/
- var query = event.body
- graphql.graphql(schema, query, root).then((graphQLresponse) => {
-    //console.log(graphQLresponse);
-    const response = {
-      statusCode: 200,
-      body: JSON.stringify(graphQLresponse),
-    };
-
-    callback(null, response);
-  });
-};
-
 
 // The schema definition, using GraphQL schema language
 var schema = graphql.buildSchema(`
@@ -69,19 +40,19 @@ var schema = graphql.buildSchema(`
 `);
 
 function parseParkingTime(str) {
-    if (str) {
-      var vals = str.split(" ");
-      var num = vals[0]
-      var unit = vals[1]
-      if (unit == "tim") {
-        return num * 60
-      } 
-      if (unit == "min") {
-        return num
-      }
-      console.log("Unknown time unit: " + unit)
+  if (str) {
+    var vals = str.split(" ");
+    var num = vals[0]
+    var unit = vals[1]
+    if (unit == "tim") {
+      return num * 60
     }
-    return null
+    if (unit == "min") {
+      return num
+    }
+    console.log("Unknown time unit: " + unit)
+  }
+  return null
 }
 
 class GeoLocation {
@@ -123,7 +94,7 @@ function readParkings(location) {
     console.log("Fetching parkings... from ", options.host, options.path)
     var req = http.request(options, response => {
       console.log("Data fetched, response status: ", response.statusCode);
-  
+
       var result = []
       var parser = JSONStream.parse('*');
       parser.on('data', data => {
@@ -148,13 +119,5 @@ var root = {
   parkings: location => readParkings(location.location),
 };
 
-/*
-var app = express();
-app.use('/graphql', graphqlHTTP({
-  schema: schema,
-  rootValue: root,
-  graphiql: true,
-}));
-app.listen(1337);
-console.log('Running a GraphQL API server at localhost:1337/graphql');
-*/
+exports.root = root
+exports.schema = schema
